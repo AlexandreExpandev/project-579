@@ -1,22 +1,18 @@
 import { Router } from 'express';
-import * as gameController from '@/api/internal/game/controller';
-import * as guessController from '@/api/internal/game/[id]/guess/controller';
-import * as configController from '@/api/internal/config/controller';
-import { adminAuthMiddleware } from '@/middleware/adminAuth';
+import { authMiddleware } from '@/middleware/auth';
 
 const router = Router();
 
-/**
- * @summary Define as rotas internas da aplicação.
- */
+// All internal routes are protected by the auth middleware
+router.use(authMiddleware);
 
-// --- Rotas de Jogo ---
-router.post('/game', gameController.postHandler);
-router.post('/game/:id/guess', guessController.postHandler);
+// This is where you will add your feature-specific routes.
+// For example:
+// import gameRoutes from './game.routes';
+// router.use('/game', gameRoutes);
 
-// --- Rotas de Configuração (Protegidas) ---
-router.get('/config/game', adminAuthMiddleware, configController.getHandler);
-router.put('/config/game', adminAuthMiddleware, configController.putHandler);
-
+router.get('/status', (req, res) => {
+  res.json({ message: 'Internal API is operational', user: req.user });
+});
 
 export default router;

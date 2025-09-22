@@ -1,13 +1,10 @@
 import { Router } from 'express';
+import externalRoutes from './external.routes';
 import internalRoutes from './internal.routes';
 
 const router = Router();
 
-/**
- * @summary Agrega todas as rotas da API.
- */
-router.use('/internal', internalRoutes);
-// Futuramente, rotas externas podem ser adicionadas aqui.
-// router.use('/external', externalRoutes);
+router.use('/v1/external', externalRoutes);
+router.use('/v1/internal', internalRoutes);
 
 export default router;

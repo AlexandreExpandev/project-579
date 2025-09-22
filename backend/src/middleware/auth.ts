@@ -1,23 +1,31 @@
 import { Request, Response, NextFunction } from 'express';
+import { AppError } from '@/utils/AppError';
 
 /**
- * @summary Middleware de autenticação (placeholder).
- * @description Este é um exemplo e deve ser implementado com a lógica de autenticação real (ex: JWT).
+ * @summary
+ * Placeholder for authentication middleware.
+ * In a real application, this would verify a JWT or session token.
  */
-export async function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    // Lógica de autenticação aqui
-    // Ex: const token = req.headers.authorization?.split(' ')[1];
-    // if (!token) { ... }
-    // const decoded = await verifyToken(token);
-    // (req as any).user = decoded; // Anexa informações do usuário à requisição
-    console.log('Middleware de autenticação executado (placeholder).');
-    next();
-  } catch (error) {
-    res.status(401).json({ error: 'Token inválido ou expirado.' });
+export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
+  // Example: Check for an Authorization header
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // For now, we'll just simulate a user and call next().
+    // In a real app, you would throw an error:
+    // return next(new AppError('Unauthorized: No token provided', 401));
   }
-}
+
+  // In a real app, you would decode the token and attach the user to the request.
+  // const token = authHeader.split(' ')[1];
+  // const decoded = verifyToken(token);
+  // req.user = decoded;
+
+  // --- SIMULATION --- 
+  // This is a placeholder to simulate an authenticated user.
+  // Remove this in a real implementation.
+  req.user = { id: 'user-123', role: 'player' };
+  // --- END SIMULATION ---
+
+  next();
+};
